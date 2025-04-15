@@ -1,0 +1,23 @@
+server:
+  port: 8080  # Puerto de la aplicaci�n
+spring:
+    application:
+        name: product
+    datasource:
+        url: jdbc:postgresql://ep-misty-credit-a59y8o5v-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+        username: neondb_owner
+        password: npg_PvN8fn4lMrZC
+        driver-class-name: org.postgresql.Driver  # PostgreSQL driver
+
+    jpa:
+        hibernate:
+            ddl-auto: update  # Changed from create to update for production
+        show-sql: true
+        database-platform: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL dialect
+
+    eureka:
+        client:
+            serviceUrl:
+                defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+        instance:
+            preferIpAddress: true

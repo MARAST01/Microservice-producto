@@ -1,8 +1,10 @@
 package com.products.product.service;
 
 import com.products.product.entity.Product;
+import com.products.product.entity.Categoria;
 import com.products.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,6 +46,9 @@ public class ProductService {
             if (updates.getDescripcion() != null) {
                 existingProduct.setDescripcion(updates.getDescripcion());
             }
+            if (updates.getImagenUrl() != null) {
+                existingProduct.setImagenUrl(updates.getImagenUrl());
+            }
             return productRepository.save(existingProduct);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
@@ -54,5 +59,41 @@ public class ProductService {
         } else {
             throw new RuntimeException("Producto no encontrado con ID: " + id);
         }
+    }
+
+    // Nuevos métodos de filtrado
+    public List<Product> findByNombre(String nombre) {
+        return productRepository.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    public List<Product> findByCategoria(Categoria categoria) {
+        return productRepository.findByCategoria(categoria);
+    }
+
+    public List<Product> findByPrecioRange(Double precioMin, Double precioMax) {
+        return productRepository.findByPrecioBetween(precioMin, precioMax);
+    }
+
+    @Transactional
+    public boolean verificarDisponibilidad(Long id, Integer cantidadSolicitada) {
+        Product product = getProductById(id);
+        return product.getCantidad() >= cantidadSolicitada;
+    }
+
+    @Transactional
+    public void actualizarStock(Long id, Integer cantidadVendida) {
+        Product product = getProductById(id);
+        if (product.getCantidad() < cantidadVendida) {
+            throw new RuntimeException("No hay suficiente stock disponible");
+        }
+        product.setCantidad(product.getCantidad() - cantidadVendida);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public void revertirStock(Long id, Integer cantidad) {
+        Product product = getProductById(id);
+        product.setCantidad(product.getCantidad() + cantidad);
+        productRepository.save(product);
     }
 }

@@ -1,12 +1,12 @@
 server:
-  port: 8088  # Puerto de la aplicación
+  port: 8088  # Puerto de la aplicaciÃ³n
 spring:
     application:
         name: product
     datasource:
-        url:
-        username:
-        password:
+        url: 
+        username: 
+        password: 
         driver-class-name: org.postgresql.Driver  # PostgreSQL driver
 
     jpa:
@@ -21,3 +21,9 @@ spring:
                 defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
         instance:
             preferIpAddress: true
+
+# Cloudinary Configuration
+cloudinary:
+    cloud_name: djyuwhvh9
+    api_key: 836385768495892
+    api_secret: Pj62xMu8EfXVHGuTkXcHAW-iuOo

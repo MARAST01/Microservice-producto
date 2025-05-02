@@ -1,5 +1,5 @@
 server:
-  port: 8088  # Puerto de la aplicación
+  port: 8081  # Puerto de la aplicación
 spring:
     application:
         name: product

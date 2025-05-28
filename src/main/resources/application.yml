@@ -1,29 +1,40 @@
 server:
   port: 8081  # Puerto de la aplicación
 spring:
-    application:
-        name: PRODUCT-MICROSERVICE
-    datasource:
-        url: jdbc:postgresql://
-        username: 
-        password: 
-        driver-class-name: org.postgresql.Driver  # PostgreSQL driver
+  application:
+    name: PRODUCT-MICROSERVICE
+  datasource:
+    url: jdbc:postgresql://
+    username:
+    password:
+    driver-class-name: org.postgresql.Driver  # PostgreSQL driver
 
-    jpa:
-        hibernate:
-            ddl-auto: update  # Changed from create to update for production
-        show-sql: true
-        database-platform: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL dialect
+  jpa:
+    hibernate:
+      ddl-auto: update  # Changed from create to update for production
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL dialect
 
-    eureka:
-        client:
-            serviceUrl:
-                defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
-        instance:
-            preferIpAddress: true
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.products.product: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    com.zaxxer.hikari: DEBUG
+    org.postgresql: DEBUG
+
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    instance:
+      preferIpAddress: true
 
 # Cloudinary Configuration
 cloudinary:
-    cloud_name: djyuwhvh9
-    api_key: 836385768495892
-    api_secret: Pj62xMu8EfXVHGuTkXcHAW-iuOo
+  cloud_name: djyuwhvh9
+  api_key: 836385768495892
+  api_secret: Pj62xMu8EfXVHGuTkXcHAW-iuOo

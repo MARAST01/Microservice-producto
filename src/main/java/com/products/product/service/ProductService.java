@@ -5,11 +5,15 @@ import com.products.product.entity.Categoria;
 import com.products.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class ProductService {
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -26,7 +30,28 @@ public class ProductService {
     }
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        try {
+            logger.info("Intentando obtener todos los productos");
+            List<Product> products = productRepository.findAll();
+            logger.info("Productos encontrados: {}", products.size());
+            
+            if (products == null) {
+                logger.warn("La lista de productos es null");
+                return new ArrayList<>();
+            }
+            
+            if (products.isEmpty()) {
+                logger.warn("No se encontraron productos en la base de datos");
+            } else {
+                logger.info("Productos recuperados exitosamente");
+                products.forEach(p -> logger.debug("Producto: id={}, nombre={}", p.getId(), p.getNombre()));
+            }
+            
+            return products;
+        } catch (Exception e) {
+            logger.error("Error al obtener productos: {}", e.getMessage(), e);
+            throw new RuntimeException("Error al obtener los productos: " + e.getMessage());
+        }
     }
 
     public Product updateProduct(Long id, Product updates) {
@@ -81,12 +106,18 @@ public class ProductService {
     }
 
     @Transactional
-    public void actualizarStock(Long id, Integer cantidadVendida) {
+    public void actualizarStock(Long id, Integer cantidad) {
         Product product = getProductById(id);
-        if (product.getCantidad() < cantidadVendida) {
-            throw new RuntimeException("No hay suficiente stock disponible");
+        // Si la cantidad es negativa, significa que queremos restar stock
+        if (cantidad < 0) {
+            if (product.getCantidad() < Math.abs(cantidad)) {
+                throw new RuntimeException("No hay suficiente stock disponible");
+            }
+            product.setCantidad(product.getCantidad() + cantidad);
+        } else {
+            // Si la cantidad es positiva, significa que queremos establecer un nuevo valor de stock
+            product.setCantidad(cantidad);
         }
-        product.setCantidad(product.getCantidad() - cantidadVendida);
         productRepository.save(product);
     }
 

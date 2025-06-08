@@ -127,4 +127,12 @@ public class ProductService {
         product.setCantidad(product.getCantidad() + cantidad);
         productRepository.save(product);
     }
+
+    @Transactional
+    public boolean verificarCompraProducto(Long productId, String userId) {
+        // Aquí deberías implementar la lógica para verificar si el usuario ha comprado el producto
+        // Por ahora, retornamos true para propósitos de prueba
+        // En producción, deberías verificar contra tu base de datos de órdenes/pedidos
+        return true;
+    }
 }

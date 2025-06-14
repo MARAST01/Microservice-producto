@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-producto
+  labels:
+    app: microservice-producto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-producto
+  template:
+    metadata:
+      labels:
+        app: microservice-producto
+    spec:
+      containers:
+        - name: microservice-producto
+          image: juanjohernan/imagenes:microservice-producto
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SERVER_PORT
+              value: "8081"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

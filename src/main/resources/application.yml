@@ -1,10 +1,10 @@
 server:
-  port: 8081  # Puerto de la aplicación
+  port: 8089  # Puerto de la aplicación
 spring:
   application:
     name: PRODUCT-MICROSERVICE
   datasource:
-    url: jdbc:postgresql://
+    url: jdbc:
     username:
     password:
     driver-class-name: org.postgresql.Driver  # PostgreSQL driver

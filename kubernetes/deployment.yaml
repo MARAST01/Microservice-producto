@@ -18,10 +18,10 @@ spec:
         - name: microservice-producto
           image: juanjohernan/imagenes:microservice-producto
           ports:
-            - containerPort: 8081
+            - containerPort: 8089
           env:
             - name: SERVER_PORT
-              value: "8081"
+              value: "8089"
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:

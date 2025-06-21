@@ -21,7 +21,7 @@ jobs:
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'temurin' 
           java-version: '17'
 
       #- name: Compilar aplicación con Maven (sin pruebas)

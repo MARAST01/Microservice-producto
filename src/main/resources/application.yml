@@ -3,11 +3,13 @@ server:
 spring:
   application:
     name: PRODUCT-MICROSERVICE
+
   datasource:
-    url: jdbc:
-    username:
-    password:
-    driver-class-name: org.postgresql.Driver  # PostgreSQL driver
+    url: jdbc:postgresql://ep-misty-credit-a59y8o5v-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_PvN8fn4lMrZC
+    driver-class-name: org.postgresql.Driver
+
 
   jpa:
     hibernate:
@@ -28,13 +30,17 @@ logging:
 
   eureka:
     client:
-      serviceUrl:
-        defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        defaultZone: http://localhost:8761/eureka
     instance:
-      preferIpAddress: true
+      prefer-ip-address: true
+
 
 # Cloudinary Configuration
 cloudinary:
   cloud_name: djyuwhvh9
   api_key: 836385768495892
   api_secret: Pj62xMu8EfXVHGuTkXcHAW-iuOo
+

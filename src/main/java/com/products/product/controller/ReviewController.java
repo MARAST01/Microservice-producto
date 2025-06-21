@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -55,5 +56,28 @@ public class ReviewController {
     @PutMapping("/{reviewId}")
     public ResponseEntity<Review> updateReview(@PathVariable Long reviewId, @RequestBody Review review) {
         return ResponseEntity.ok(reviewService.updateReview(reviewId, review));
+    }
+
+    @GetMapping("/can-review")
+    public ResponseEntity<Map<String, Object>> canUserReviewProduct(
+            @RequestParam Long userId, 
+            @RequestParam Long productId) {
+        try {
+            boolean canReview = reviewService.canUserReviewProduct(userId, productId);
+            Map<String, Object> response = Map.of(
+                "canReview", canReview,
+                "userId", userId,
+                "productId", productId
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = Map.of(
+                "canReview", false,
+                "error", e.getMessage(),
+                "userId", userId,
+                "productId", productId
+            );
+            return ResponseEntity.ok(errorResponse);
+        }
     }
 } 

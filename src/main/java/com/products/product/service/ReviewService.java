@@ -19,17 +19,17 @@ public class ReviewService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private DeliveryValidationService deliveryValidationService;
+
     @Transactional
     public Review createReview(Review review) {
-        // For testing purposes, we'll set verifiedPurchase to true
-        review.setVerifiedPurchase(true);
-        
-        // Validate rating
+        // Validar que el rating esté entre 1 y 5
         if (review.getRating() < 1 || review.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
 
-        // Validate comment length
+        // Validar longitud del comentario
         if (review.getComment() != null && review.getComment().length() > 500) {
             throw new IllegalArgumentException("Comment must not exceed 500 characters");
         }
@@ -40,6 +40,19 @@ public class ReviewService {
 
         // Asignar el producto a la reseña
         review.setProduct(product);
+
+        // Validar que el usuario no haya dejado ya una reseña para este producto
+        if (reviewRepository.existsByUserIdAndProductId(review.getUserId(), product.getId())) {
+            throw new IllegalArgumentException("User has already reviewed this product");
+        }
+
+        // Validar que el usuario haya recibido el producto (estado = "ENTREGADA" en tabla deliveries)
+        if (!deliveryValidationService.hasUserReceivedProduct(review.getUserId(), product.getId())) {
+            throw new IllegalArgumentException("User must have received the product before leaving a review");
+        }
+
+        // Marcar como compra verificada ya que pasó la validación de entrega
+        review.setVerifiedPurchase(true);
 
         return reviewRepository.save(review);
     }
@@ -75,5 +88,21 @@ public class ReviewService {
         }
 
         return reviewRepository.save(existingReview);
+    }
+
+    /**
+     * Verifica si un usuario puede dejar una reseña para un producto específico
+     * @param userId ID del usuario
+     * @param productId ID del producto
+     * @return true si puede dejar reseña, false en caso contrario
+     */
+    public boolean canUserReviewProduct(Long userId, Long productId) {
+        // Verificar que no haya dejado ya una reseña
+        if (reviewRepository.existsByUserIdAndProductId(userId, productId)) {
+            return false;
+        }
+
+        // Verificar que haya recibido el producto
+        return deliveryValidationService.hasUserReceivedProduct(userId, productId);
     }
 } 

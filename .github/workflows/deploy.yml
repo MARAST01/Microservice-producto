@@ -7,7 +7,7 @@ on:
       - develop
 
 env:
-  IMAGE_NAME: juanjohernan/imagenes:microservice-producto
+  IMAGE_NAME: juanjoher/imagenes:microservice-producto
   REGISTRY: docker.io
 
 jobs:

@@ -49,3 +49,4 @@ jobs:
         with:
           commit_message: "Update image reference to $IMAGE_NAME"
           branch: ${{ github.ref_name }}
+      

@@ -32,13 +32,13 @@ jobs:
         with:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
-      - name: Listar imágenes locales
-        run: docker images
-
+      
       - name: Construir y subir imagen a Docker Hub
         run: |
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
+      - name: Listar imágenes locales
+        run: docker images
 
       - name: Actualizar manifiesto de Kubernetes
         run: |

@@ -15,8 +15,9 @@ spec:
         app: producto
     spec:
       containers:
-        - name: producto
-          image: juanjohernan/imagenes:microservice-producto
+        - name: microservice-producto
+          image: juanjoher/imagenes:microservice-producto
+
           ports:
             - containerPort: 8089
           env:

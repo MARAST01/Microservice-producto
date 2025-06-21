@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      #- name: Compilar aplicación con Maven (sin pruebas)
+      #- name: Compilar aplicación con Maven (sin pruebas) 
       #  run: ./mvnw clean package -DskipTests
 
       - name: Iniciar sesión en Docker Hub

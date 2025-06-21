@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-producto
+  name: producto
   labels:
-    app: microservice-producto
+    app: producto
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microservice-producto
+      app: producto
   template:
     metadata:
       labels:
-        app: microservice-producto
+        app: producto
     spec:
       containers:
-        - name: microservice-producto
+        - name: producto
           image: juanjohernan/imagenes:microservice-producto
           ports:
             - containerPort: 8089

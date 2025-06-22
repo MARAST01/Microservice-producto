@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producto
+  labels:
+    app: producto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: producto
+  template:
+    metadata:
+      labels:
+        app: producto
+    spec:
+      containers:
+        - name: microservice-producto
+          image: juanjoher/imagenes:microservice-producto
+
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SERVER_PORT
+              value: "8089"
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: password
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: url
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

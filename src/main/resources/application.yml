@@ -4,9 +4,9 @@ spring:
     application:
         name: PRODUCT-MICROSERVICE
     datasource:
-        url: jdbc:postgresql://
-        username: 
-        password: 
+        url: jdbc:postgresql://ep-misty-credit-a59y8o5v-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+        username: neondb_owner
+        password: npg_PvN8fn4lMrZC
         driver-class-name: org.postgresql.Driver  # PostgreSQL driver
 
     jpa:

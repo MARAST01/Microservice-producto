@@ -10,6 +10,21 @@ spring:
     password: npg_PvN8fn4lMrZC
     driver-class-name: org.postgresql.Driver
 
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        username: admin
+        password: admin
+        instance:
+          metadata:
+            user.name: admin
+            user.password: admin
+
+  security:
+    user:
+      name: admin
+      password: admin
 
   jpa:
     hibernate:
@@ -43,4 +58,15 @@ cloudinary:
   cloud_name: djyuwhvh9
   api_key: 836385768495892
   api_secret: Pj62xMu8EfXVHGuTkXcHAW-iuOo
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
 

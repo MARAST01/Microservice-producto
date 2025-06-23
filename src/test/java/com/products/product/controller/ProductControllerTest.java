@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProductControllerTest {
@@ -66,7 +68,7 @@ public class ProductControllerTest {
             return p;
         });
 
-        mockMvc.perform(multipart("/api/product/crear")
+        mockMvc.perform(multipart("/api/productos/crear")
                         .file(productJson)
                         .file(image))
                 .andExpect(status().isOk())
@@ -83,7 +85,7 @@ public class ProductControllerTest {
 
         when(productService.getProductById(1L)).thenReturn(product);
 
-        mockMvc.perform(get("/api/product/{id}", 1L))
+        mockMvc.perform(get("/api/productos/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.nombre").value("Test Product"));
@@ -97,7 +99,7 @@ public class ProductControllerTest {
 
         when(productService.findAll()).thenReturn(Collections.singletonList(product));
 
-        mockMvc.perform(get("/api/product"))
+        mockMvc.perform(get("/api/productos/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].nombre").value("Test Product"));
@@ -113,7 +115,7 @@ public class ProductControllerTest {
         doNothing().when(cloudinaryService).deleteImage(any());
         doNothing().when(productService).deleteProduct(1L);
 
-        mockMvc.perform(delete("/api/product/{id}", 1L))
+        mockMvc.perform(delete("/api/productos/{id}", 1L))
                 .andExpect(status().isOk());
     }
 
@@ -125,7 +127,7 @@ public class ProductControllerTest {
 
         when(productService.findByNombre("Test Product")).thenReturn(Collections.singletonList(product));
 
-        mockMvc.perform(get("/api/product/buscar")
+        mockMvc.perform(get("/api/productos/buscar")
                         .param("nombre", "Test Product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
@@ -140,7 +142,7 @@ public class ProductControllerTest {
 
         when(productService.findByCategoria(Categoria.ELECTRONICA)).thenReturn(Collections.singletonList(product));
 
-        mockMvc.perform(get("/api/product/categoria/{categoria}", Categoria.ELECTRONICA))
+        mockMvc.perform(get("/api/productos/categoria/{categoria}", Categoria.ELECTRONICA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].categoria").value("ELECTRONICA"));
@@ -154,7 +156,7 @@ public class ProductControllerTest {
 
         when(productService.findByPrecioRange(10.0, 100.0)).thenReturn(Collections.singletonList(product));
 
-        mockMvc.perform(get("/api/product/precio")
+        mockMvc.perform(get("/api/productos/precio")
                         .param("precioMin", "10.0")
                         .param("precioMax", "100.0"))
                 .andExpect(status().isOk())
@@ -170,7 +172,7 @@ public class ProductControllerTest {
         when(productService.verificarDisponibilidad(1L, 5)).thenReturn(true);
         when(productService.getProductById(1L)).thenReturn(product);
 
-        mockMvc.perform(get("/api/product/{id}/disponibilidad", 1L)
+        mockMvc.perform(get("/api/productos/{id}/disponibilidad", 1L)
                         .param("cantidad", "5"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.disponible").value(true))
@@ -185,7 +187,7 @@ public class ProductControllerTest {
         doNothing().when(productService).actualizarStock(1L, 5);
         when(productService.getProductById(1L)).thenReturn(product);
 
-        mockMvc.perform(post("/api/product/{id}/actualizar-stock", 1L)
+        mockMvc.perform(post("/api/productos/{id}/stock", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"cantidad\": 5}"))
                 .andExpect(status().isOk())
@@ -200,7 +202,7 @@ public class ProductControllerTest {
         doNothing().when(productService).revertirStock(1L, 5);
         when(productService.getProductById(1L)).thenReturn(product);
 
-        mockMvc.perform(post("/api/product/{id}/revertir-stock", 1L)
+        mockMvc.perform(post("/api/productos/{id}/revertir-stock", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"cantidad\": 5}"))
                 .andExpect(status().isOk())
